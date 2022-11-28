@@ -1,9 +1,0 @@
-//https://newsapi.org/
-//v2/everything?
-//q=tesla
-//&from=2022-09-23&sortBy=publishedAt&apiKey=API_KEY
-//https://newsapi.org/
-//v2/top-headlines?
-//country=eg&category=sports&apiKey=372ac5c8751f4bb0a0624f15df043f98
-//https://newsapi.org/
-//v2/everything?q=su&apiKey=372ac5c8751f4bb0a0624f15df043f98

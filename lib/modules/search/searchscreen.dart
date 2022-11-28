@@ -1,21 +1,19 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/layout/cubit/cubit.dart';
-import 'package:news_app/layout/cubit/status.dart';
-import 'package:news_app/shared/componant/componants.dart';
-
+import 'package:news_app/shared/components/components.dart';
+import 'package:news_app/shared/cubit/cubit.dart';
+import 'package:news_app/shared/cubit/states.dart';
 
 class SearchScreen extends StatelessWidget {
-   SearchScreen({Key? key}) : super(key: key);
-  var searchContrrol=TextEditingController();
+  SearchScreen({Key? key}) : super(key: key);
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NewsCubit, NewsState>(
+    return BlocConsumer<NewsCubit, NewsStates>(
       listener: (context, state) {},
       builder: (context, state) {
-          List<dynamic> list = NewsCubit.get(context).search;
+        List<dynamic> list = NewsCubit.get(context).search;
         return Scaffold(
           appBar: AppBar(),
           body: Column(
@@ -23,7 +21,7 @@ class SearchScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: deffaultFormField(
-                  controller: searchContrrol,
+                  controller: searchController,
                   labelText: "Search",
                   prefixIcon: Icons.search,
                   onChanged: (value) {
@@ -71,3 +69,5 @@ class SearchScreen extends StatelessWidget {
     );
   }
 }
+
+//https://newsapi.org/v2/everything?q=tesla&apiKey=c7cfbee96c2f47d2a7b758fa87def9d4

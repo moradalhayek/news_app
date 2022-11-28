@@ -64,4 +64,3 @@ ThemeData themDark()=>ThemeData(
                           backgroundColor: HexColor('333739'),
                           unselectedItemColor: Colors.red,
                             type: BottomNavigationBarType.fixed));
-               

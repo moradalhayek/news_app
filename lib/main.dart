@@ -1,45 +1,57 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/layout/cubit/cubit.dart';
-import 'package:news_app/layout/cubit/status.dart';
-import 'package:news_app/layout/news_app/news_layout.dart';
-import 'package:news_app/shared/network/local/cach_helper.dart';
+import 'package:news_app/bloc_observer.dart';
+import 'package:news_app/layout/news_layout.dart';
+import 'package:news_app/shared/cubit/cubit.dart';
+import 'package:news_app/shared/cubit/states.dart';
+import 'package:news_app/shared/network/local/cache_helper.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
-import 'package:news_app/shared/styles/bloc_observer.dart';
-import 'package:news_app/shared/styles/const.dart';
+import 'package:news_app/shared/styles/colors.dart';
 
-void main()async {
-   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = MyBlocObserver();
-  DioHelper.init();
-await  CachHelper.init();
-bool? isDark=CachHelper.getBoolean(key: 'isDark');
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
  
-  runApp( MyApp(isDark: isDark,));
+  Bloc.observer=MyBlocObserver();
+     
+      DioHelper.init();
+      await CacheHelper.init();
+      bool deffoultMode = false;
+      late bool? isDark = CacheHelper.getBool(key: 'isDark');
+      runApp(MyApp(isDark ?? deffoultMode));
+    
+    
+
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-   bool? isDark;
-  MyApp({Key? key,  this.isDark}) : super(key: key);
+  late bool isDark;
+  MyApp(this.isDark, {Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => NewsCubit()..getBusiness()..getSports()..getScience()
-        ..ChingDarkMode(fromSheard: isDark)),
-        ],
-        child: BlocConsumer<NewsCubit, NewsState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              return MaterialApp(
-                theme: themLight(),
-                darkTheme: themDark(),
-                debugShowCheckedModeBanner: false,
-               themeMode:NewsCubit.get( context).isDark?ThemeMode.dark:ThemeMode.light,
-                home: NewsLayout(key: key),
-              );
-            }));
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => NewsCubit()
+            ..getBusiness()
+            ..changeThemMode(fromShared: isDark),
+        ),
+      ],
+      child: BlocConsumer<NewsCubit, NewsStates>(
+          listener: (BuildContext context, state) {},
+          builder: (BuildContext context, Object? state) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme:themLight(),
+              darkTheme:themDark(), 
+              themeMode: NewsCubit.get(context).isDark
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+              home:  const NewsLayout(),
+            );
+          }),
+    );
   }
 }
